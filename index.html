@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Meniny</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script src="js/script.js"></script>
+
+</head>
+<body>
+<div class="button refresh" data-toggle="modal" data-target="#myModal"><img src="picture/folder.svg" alt="refresh"  height="35" width="35" ></div>
+
+<header>
+    <h1>KALENDÁR</h1>
+</header>
+<section>
+    <article>
+        <header>
+            <h2>Nájsť dátum</h2>
+        </header>
+        <div>
+            <form onsubmit="return false;" >
+                <label for="fname">Meno:</label><br>
+                <input type="text" id="fname" name="fname" placeholder="Vložte meno" required><br>
+                <label for="country">Krajina:</label><br>
+                <select id="country" name="country">
+                    <option value="sk">Slovensko</option>
+                    <option value="cz">Česko</option>
+                    <option value="at">Rakúsko</option>
+                    <option value="hu">Maďarsko</option>
+                    <option value="pl">Poľsko</option>
+                </select>
+                <div>
+                    <button type="submit" onclick="getDate()">Hľadať</button>
+                </div>
+            </form>
+        </div>
+        <p id="show-date" class="result"></p>
+    </article>
+    <article>
+        <header>
+            <h2>Nájsť meno</h2>
+        </header>
+        <form onsubmit="return false;">
+            <label for="fdate">Dátum:</label><br>
+            <input type="text" id="fdate" name="fdate" placeholder="Vložte dátum: dd.mm." required><br>
+
+            <label for="fcountry">Krajina:</label><br>
+            <select id="fcountry" name="fcountry">
+                <option value="sk">Slovensko</option>
+                <option value="cz">Česko</option>
+                <option value="at">Rakúsko</option>
+                <option value="hu">Maďarsko</option>
+                <option value="pl">Poľsko</option>
+            </select>
+            <div>
+                <button type="submit"  onclick="getName()">Hľadať</button>
+            </div>
+        </form>
+        <p id="show-name" class="result"></p>
+    </article>
+    <article>
+        <header>
+            <h2>Nájsť špeciálne dni</h2>
+        </header>
+        <form onsubmit="return false;">
+            <label for="spesl-days">Krajina:</label><br>
+            <select id="spesl-days" name="spesl-days" >
+                <option value="sk/holidays">Slovensko - sviatky</option>
+                <option value="sk/memorials">Slovensko - pamätné dni</option>
+                <option value="cz/holidays">Česko - sviatky</option>
+            </select>
+            <div>
+            <button type="submit" onclick="getSpeslDays()">Hľadať</button>
+            </div>
+        </form>
+        <div  class="result">
+            <table id="spesl-days-name">
+
+            </table>
+        </div>
+    </article>
+    <article>
+        <header>
+            <h2>Pridať meno do kalendára</h2>
+        </header>
+        <form onsubmit="return false;">
+            <label for="add-name">Meno:</label><br>
+            <input type="text" id="add-name" name="add-name" placeholder="Vložte meno" required><br>
+
+            <label for="add-date">Dátum:</label><br>
+            <input type="text" id="add-date" name="add-date" placeholder="Vložte dátum: dd.mm." required><br>
+            <div>
+                <button type="submit" onclick="addName()">Pridať</button>
+            </div>
+        </form>
+        <div  class="result">
+            <p id="show-add-name" class="result"></p>
+        </div>
+    </article>
+
+
+
+
+</section>
+
+<!-- The Modal -->
+<div class="modal" id="myModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h1 class="modal-title">Popis API</h1>
+                <div class="close" data-dismiss="modal">×</div>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <section>
+                    <article class="modal-article">
+                        <header >
+                            <h2 class="left">Získať dátum</h2>
+                        </header>
+                        <div><p >GET</p></div>
+                        <div><p class="left">https://wt144.fei.stuba.sk/strankaZ6/api/{skratka-krajiny}/name/{meno}/</p></div>
+                        <div><p class="left">{"date":"dd.mm."}</p></div>
+
+                    </article>
+                    <article class="modal-article">
+                        <header >
+                            <h2 class="left">Získať meno</h2>
+                        </header>
+                        <div><p >GET</p></div>
+                        <div><p class="left">https://wt144.fei.stuba.sk/strankaZ6/api/{skratka-krajiny}/date/{dátum}/</p></div>
+                        <div><p class="left">{"name":["meno1","meno1"]}</p></div>
+
+                    </article>
+                    <article class="modal-article">
+                        <header >
+                            <h2 class="left">Získať sviatky</h2>
+                        </header>
+                        <div><p >GET</p></div>
+                        <div><p class="left">https://wt144.fei.stuba.sk/strankaZ6/api/{skratka-krajiny}/holidays/</p></div>
+                        <div><p class="left">{"holidays":[{"date":"dd.mm.","name":"sviatok"}]}</p></div>
+                    </article>
+                    <article class="modal-article">
+                        <header >
+                            <h2 class="left">Získať pamätné dni</h2>
+                        </header>
+                        <div><p >GET</p></div>
+                        <div><p class="left">https://wt144.fei.stuba.sk/strankaZ6/api/{skratka-krajiny}/memorials/</p></div>
+                        <div><p class="left">{"memorials":[{"date":"dd.mm.","name":"pamätný deň"}]}</p></div>
+                    </article>
+                    <article class="modal-article">
+                        <header >
+                            <h2 class="left">Pridať meno</h2>
+                        </header>
+                        <div><p >POST</p></div>
+                        <div><p class="left">https://wt144.fei.stuba.sk/strankaZ6/api/create/</p></div>
+                        <div><p class="left">VSTUP: {"name":{meno}, "date":"dd.mm."}</p></div>
+                        <div><p class="left">VÝSTUP: {"added-id":{id}} /  {Chybová hláška}</p></div>
+                    </article>
+
+                </section>
+
+
+
+
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<footer>
+    <span>Design by Katarína Stasová</span>
+    <div><a href="https://www.freepik.com" title="Freepik">Freepik</a></div>
+
+</footer>
+</body>
+</html>
